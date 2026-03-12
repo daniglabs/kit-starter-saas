@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+}
+
+.card {
+  @apply rounded-lg border border-border bg-muted/40 shadow-sm;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors;
+}
+
+.btn-primary {
+  @apply btn bg-primary text-primary-foreground hover:bg-primary/90;
+}
+
+.btn-ghost {
+  @apply btn bg-transparent text-muted-foreground hover:bg-muted/60;
+}
+
+.modal-target:target {
+  @apply opacity-100 pointer-events-auto;
+}
