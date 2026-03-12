@@ -9,17 +9,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#020817",
-        foreground: "#f9fafb",
+        background: "#f8fafc",
+        foreground: "#0f172a",
         primary: {
           DEFAULT: "#4f46e5",
-          foreground: "#f9fafb"
+          foreground: "#ffffff"
         },
         muted: {
-          DEFAULT: "#111827",
-          foreground: "#9ca3af"
+          DEFAULT: "#f1f5f9",
+          foreground: "#64748b"
         },
-        border: "#1f2933"
+        border: "#e2e8f0"
       },
       borderRadius: {
         lg: "0.75rem",

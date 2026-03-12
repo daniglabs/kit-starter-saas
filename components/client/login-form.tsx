@@ -52,7 +52,7 @@ export function LoginForm() {
           <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
             <LogIn className="h-5 w-5 text-primary" />
           </div>
-          <h1 className="text-xl font-semibold tracking-tight">
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">
             Accede a tu cuenta
           </h1>
           <p className="text-sm text-muted-foreground">
@@ -61,8 +61,8 @@ export function LoginForm() {
         </header>
 
         {errorMessage && (
-          <div className="flex items-start gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-100">
-            <AlertCircle className="mt-0.5 h-4 w-4" />
+          <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <p>{errorMessage}</p>
           </div>
         )}
@@ -74,7 +74,7 @@ export function LoginForm() {
           <div className="space-y-1.5">
             <label
               htmlFor="email"
-              className="block text-sm font-medium"
+              className="block text-sm font-medium text-foreground"
             >
               Email
             </label>
@@ -84,14 +84,14 @@ export function LoginForm() {
               type="email"
               required
               autoComplete="email"
-              className="block w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm outline-none ring-0 focus:border-primary focus:ring-2 focus:ring-primary/40"
+              className="input-base block w-full"
             />
           </div>
 
           <div className="space-y-1.5">
             <label
               htmlFor="password"
-              className="block text-sm font-medium"
+              className="block text-sm font-medium text-foreground"
             >
               Contraseña
             </label>
@@ -101,7 +101,7 @@ export function LoginForm() {
               type="password"
               required
               autoComplete="current-password"
-              className="block w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm outline-none ring-0 focus:border-primary focus:ring-2 focus:ring-primary/40"
+              className="input-base block w-full"
             />
           </div>
 

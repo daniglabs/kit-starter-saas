@@ -27,7 +27,7 @@ export default async function AdminLayout({
           { href: "/admin/users", label: "Usuarios", icon: "users" }
         ]}
       />
-      <main className="flex-1 overflow-y-auto px-8 py-8">{children}</main>
+      <main className="flex-1 overflow-y-auto bg-background px-8 py-8">{children}</main>
     </div>
   );
 }

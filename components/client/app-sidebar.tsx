@@ -39,7 +39,7 @@ export function AppSidebar({ variant, links }: AppSidebarProps) {
   }, null);
 
   return (
-    <aside className="flex h-screen w-60 flex-col border-r border-border bg-black/40 px-4 py-6">
+    <aside className="flex h-screen w-60 flex-col border-r border-border bg-white px-4 py-6 shadow-sm">
       <div className="mb-8">
         <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
           {variant === "admin" ? "Panel admin" : "Panel cliente"}
@@ -59,7 +59,7 @@ export function AppSidebar({ variant, links }: AppSidebarProps) {
               className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
                 isActive
                   ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                  : "text-muted-foreground hover:bg-gray-100 hover:text-foreground"
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -72,7 +72,7 @@ export function AppSidebar({ variant, links }: AppSidebarProps) {
       <button
         type="button"
         onClick={() => signOut({ callbackUrl: "/login" })}
-        className="mt-4 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-red-500/10 hover:text-red-200"
+        className="mt-4 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600"
       >
         <LogOut className="h-4 w-4" />
         <span>Cerrar sesión</span>

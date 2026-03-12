@@ -10,7 +10,7 @@ export default async function AdminUsersPage() {
     <div className="mx-auto max-w-5xl space-y-8">
       <header className="flex items-center justify-between gap-4">
         <div className="space-y-1.5">
-          <h1 className="text-2xl font-semibold tracking-tight">Usuarios</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Usuarios</h1>
           <p className="text-sm text-muted-foreground">
             Gestiona usuarios, roles y accesos del SaaS.
           </p>
@@ -24,7 +24,7 @@ export default async function AdminUsersPage() {
       </header>
 
       <section className="card p-4">
-        <h2 className="text-sm font-medium">Listado de usuarios</h2>
+        <h2 className="text-sm font-medium text-foreground">Listado de usuarios</h2>
         <p className="mt-1 text-xs text-muted-foreground">
           Edita el rol o elimina usuarios existentes.
         </p>
@@ -45,7 +45,7 @@ export default async function AdminUsersPage() {
                   key={user._id}
                   className="border-b border-border/60 last:border-0"
                 >
-                  <td className="px-3 py-2 text-sm">{user.name}</td>
+                  <td className="px-3 py-2 text-sm text-foreground">{user.name}</td>
                   <td className="px-3 py-2 text-sm text-muted-foreground">
                     {user.email}
                   </td>
@@ -62,7 +62,7 @@ export default async function AdminUsersPage() {
                       <select
                         name="role"
                         defaultValue={user.role}
-                        className="rounded-lg border border-border bg-black/30 px-2 py-1 text-xs outline-none focus:border-primary focus:ring-2 focus:ring-primary/40"
+                        className="select-base rounded-lg px-2 py-1 text-xs"
                       >
                         <option value="admin">Admin</option>
                         <option value="customer">Customer</option>
@@ -107,9 +107,9 @@ export default async function AdminUsersPage() {
         id="create-user"
         className="modal-target fixed inset-0 z-30 flex items-center justify-center bg-black/60 opacity-0 pointer-events-none"
       >
-        <div className="w-full max-w-md rounded-xl border border-border bg-black p-6 shadow-lg">
+        <div className="w-full max-w-md rounded-xl border border-border bg-white p-6 shadow-xl">
           <header className="mb-4 space-y-1.5">
-            <h2 className="text-lg font-semibold tracking-tight">
+            <h2 className="text-lg font-semibold tracking-tight text-foreground">
               Crear nuevo usuario
             </h2>
             <p className="text-xs text-muted-foreground">
@@ -122,39 +122,39 @@ export default async function AdminUsersPage() {
             className="space-y-4"
           >
             <div className="space-y-1.5">
-              <label className="text-xs font-medium">Nombre</label>
+              <label className="text-xs font-medium text-foreground">Nombre</label>
               <input
                 name="name"
                 placeholder="Nombre"
                 required
-                className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/40"
+                className="input-base"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-medium">Email</label>
+              <label className="text-xs font-medium text-foreground">Email</label>
               <input
                 name="email"
                 type="email"
                 placeholder="email@empresa.com"
                 required
-                className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/40"
+                className="input-base"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-medium">Contraseña</label>
+              <label className="text-xs font-medium text-foreground">Contraseña</label>
               <input
                 name="password"
                 type="password"
                 placeholder="Contraseña segura"
                 required
-                className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/40"
+                className="input-base"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-medium">Rol</label>
+              <label className="text-xs font-medium text-foreground">Rol</label>
               <select
                 name="role"
-                className="w-full rounded-lg border border-border bg-black/30 px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/40"
+                className="select-base w-full"
                 defaultValue="customer"
               >
                 <option value="admin">Admin</option>
