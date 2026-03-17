@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
+import { logAction } from "@/lib/audit";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -33,7 +34,7 @@ export const authOptions: NextAuthOptions = {
         console.log("[Auth] user from DB", {
           found: !!user,
           id: user?._id,
-          role: user?.role
+          userType: user?.userType
         });
 
         if (!user) return null;
@@ -47,7 +48,7 @@ export const authOptions: NextAuthOptions = {
           id: String(user._id),
           name: user.name,
           email: user.email,
-          role: user.role
+          userType: (user as any).userType ?? (user as any).role
         } as any;
       }
     })
@@ -58,20 +59,46 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = (user as any).role;
+        token.userType = (user as any).userType ?? (user as any).role;
+        token.email = user.email;
+        token.name = user.name;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.sub;
-        (session.user as any).role = token.role;
+        (session.user as any).userType = token.userType ?? (token as any).role;
       }
       return session;
     }
   },
   pages: {
     signIn: "/login"
+  },
+  events: {
+    async signIn({ user }) {
+      await logAction({
+        userId: user.id ?? null,
+        userEmail: user.email ?? "",
+        userName: user.name ?? "",
+        action: "login",
+        entity: "auth",
+        details: `Inicio de sesión (${user.email})`
+      });
+    },
+    async signOut({ token }) {
+      const email = (token as any)?.email ?? "";
+      const name = (token as any)?.name ?? "";
+      await logAction({
+        userId: (token as any)?.sub ?? null,
+        userEmail: email,
+        userName: name,
+        action: "logout",
+        entity: "auth",
+        details: `Cierre de sesión (${email})`
+      });
+    }
   }
 };
 

@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 
+// Registrar modelos antes de cualquier operación (evita MissingSchemaError en populate)
+import "@/models";
+
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {

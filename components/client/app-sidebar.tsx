@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, UserCircle, Settings, ScrollText, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 type SidebarVariant = "admin" | "customer";
@@ -10,7 +10,7 @@ type SidebarVariant = "admin" | "customer";
 interface SidebarLink {
   href: string;
   label: string;
-  icon: "dashboard" | "users";
+  icon: "dashboard" | "users" | "profile" | "settings" | "logs";
 }
 
 interface AppSidebarProps {
@@ -20,7 +20,10 @@ interface AppSidebarProps {
 
 const iconMap: Record<SidebarLink["icon"], React.ComponentType<any>> = {
   dashboard: LayoutDashboard,
-  users: Users
+  users: Users,
+  profile: UserCircle,
+  settings: Settings,
+  logs: ScrollText
 };
 
 export function AppSidebar({ variant, links }: AppSidebarProps) {

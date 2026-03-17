@@ -8,7 +8,7 @@ export default async function HomePage() {
     redirect("/login");
   }
 
-  if (user.role === "admin") {
+  if (user.userType === "admin") {
     redirect("/admin");
   }
 

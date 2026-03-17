@@ -1,10 +1,19 @@
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
-import { createUser, updateUserRole, deleteUser } from "@/app/actions/users";
+import { createUser } from "@/app/actions/users";
+import { UsersTable } from "@/components/client/users-table";
 
 export default async function AdminUsersPage() {
   await connectDB();
   const users = await User.find().sort({ createdAt: -1 }).lean();
+
+  const usersForTable = users.map((u: any) => ({
+    _id: String(u._id),
+    name: u.name,
+    email: u.email,
+    userType: u.userType,
+    createdAt: u.createdAt
+  }));
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
@@ -26,81 +35,9 @@ export default async function AdminUsersPage() {
       <section className="card p-4">
         <h2 className="text-sm font-medium text-foreground">Listado de usuarios</h2>
         <p className="mt-1 text-xs text-muted-foreground">
-          Edita el rol o elimina usuarios existentes.
+          Edita o elimina usuarios desde los botones de cada fila.
         </p>
-        <div className="mt-4 overflow-x-auto">
-          <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-border text-xs uppercase text-muted-foreground">
-              <tr>
-                <th className="px-3 py-2">Nombre</th>
-                <th className="px-3 py-2">Email</th>
-                <th className="px-3 py-2">Rol</th>
-                <th className="px-3 py-2">Creado</th>
-                <th className="px-3 py-2 text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user: any) => (
-                <tr
-                  key={user._id}
-                  className="border-b border-border/60 last:border-0"
-                >
-                  <td className="px-3 py-2 text-sm text-foreground">{user.name}</td>
-                  <td className="px-3 py-2 text-sm text-muted-foreground">
-                    {user.email}
-                  </td>
-                  <td className="px-3 py-2">
-                    <form
-                      action={updateUserRole}
-                      className="flex items-center gap-2"
-                    >
-                      <input
-                        type="hidden"
-                        name="userId"
-                        value={String(user._id)}
-                      />
-                      <select
-                        name="role"
-                        defaultValue={user.role}
-                        className="select-base rounded-lg px-2 py-1 text-xs"
-                      >
-                        <option value="admin">Admin</option>
-                        <option value="customer">Customer</option>
-                      </select>
-                      <button
-                        type="submit"
-                        className="rounded-full bg-primary/80 px-3 py-1 text-xs font-medium text-primary-foreground hover:bg-primary"
-                      >
-                        Guardar
-                      </button>
-                    </form>
-                  </td>
-                  <td className="px-3 py-2 text-xs text-muted-foreground">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="px-3 py-2 text-right">
-                    <form
-                      action={deleteUser}
-                      className="inline"
-                    >
-                      <input
-                        type="hidden"
-                        name="userId"
-                        value={String(user._id)}
-                      />
-                      <button
-                        type="submit"
-                        className="rounded-full bg-red-500/80 px-3 py-1 text-xs font-medium text-red-50 hover:bg-red-500"
-                      >
-                        Eliminar
-                      </button>
-                    </form>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <UsersTable users={usersForTable} />
       </section>
 
       <div
@@ -151,9 +88,9 @@ export default async function AdminUsersPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-foreground">Rol</label>
+              <label className="text-xs font-medium text-foreground">Tipo de usuario</label>
               <select
-                name="role"
+                name="userType"
                 className="select-base w-full"
                 defaultValue="customer"
               >

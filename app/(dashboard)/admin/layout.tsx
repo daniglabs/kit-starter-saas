@@ -14,7 +14,7 @@ export default async function AdminLayout({
     redirect("/login");
   }
 
-  if (user.role !== "admin") {
+  if (user.userType !== "admin") {
     redirect("/dashboard");
   }
 
@@ -24,7 +24,9 @@ export default async function AdminLayout({
         variant="admin"
         links={[
           { href: "/admin", label: "Resumen", icon: "dashboard" },
-          { href: "/admin/users", label: "Usuarios", icon: "users" }
+          { href: "/admin/users", label: "Usuarios", icon: "users" },
+          { href: "/admin/logs", label: "Logs", icon: "logs" },
+          { href: "/admin/profile", label: "Mi perfil", icon: "profile" }
         ]}
       />
       <main className="flex-1 overflow-y-auto bg-background px-8 py-8">{children}</main>

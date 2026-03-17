@@ -1,14 +1,17 @@
 import { Schema, model, models, type Model } from "mongoose";
 
-export type UserRole = "admin" | "customer";
+export type UserType = "admin" | "customer";
 
 export interface IUser {
   _id: string;
   email: string;
   name: string;
+  firstName?: string;
+  lastName?: string;
   passwordHash: string;
-  role: UserRole;
+  userType: UserType;
   organization: Schema.Types.ObjectId | null;
+  organizationRole: Schema.Types.ObjectId | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,8 +20,10 @@ const userSchema = new Schema<IUser>(
   {
     email: { type: String, required: true, unique: true, index: true },
     name: { type: String, required: true },
+    firstName: { type: String, default: "" },
+    lastName: { type: String, default: "" },
     passwordHash: { type: String, required: true },
-    role: {
+    userType: {
       type: String,
       enum: ["admin", "customer"],
       required: true,
@@ -27,6 +32,11 @@ const userSchema = new Schema<IUser>(
     organization: {
       type: Schema.Types.ObjectId,
       ref: "Organization",
+      default: null
+    },
+    organizationRole: {
+      type: Schema.Types.ObjectId,
+      ref: "OrganizationRole",
       default: null
     }
   },
