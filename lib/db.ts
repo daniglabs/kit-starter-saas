@@ -6,6 +6,8 @@ if (!MONGODB_URI) {
   throw new Error("MONGODB_URI no está definida en las variables de entorno");
 }
 
+const uri: string = MONGODB_URI;
+
 interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
@@ -27,7 +29,7 @@ export async function connectDB() {
   if (cache.conn) return cache.conn;
 
   if (!cache.promise) {
-    cache.promise = mongoose.connect(MONGODB_URI, {
+    cache.promise = mongoose.connect(uri, {
       dbName: process.env.MONGODB_DB_NAME || "saas-kit-starter"
     });
   }
