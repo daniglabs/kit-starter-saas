@@ -9,11 +9,23 @@ import {
 import { getCurrentUserWithOrg, hasPermission } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { OrgUsersTable } from "@/components/client/org-users-table";
+import { InviteOrgUserModal } from "@/components/client/invite-org-user-modal";
 
-export default async function OrgUsersPage() {
+export default async function OrgUsersPage({
+  searchParams
+}: {
+  searchParams: Promise<{ invited?: string }>
+}) {
+  const params = await searchParams;
   const user = await getCurrentUserWithOrg();
   if (!user?.organizationId) redirect("/dashboard");
   if (!hasPermission(user, "users.read")) {
+    if (hasPermission(user, "roles.read")) {
+      redirect("/dashboard/settings/roles");
+    }
+    if (hasPermission(user, "logs.read")) {
+      redirect("/dashboard/settings/logs");
+    }
     redirect("/dashboard");
   }
 
@@ -53,81 +65,25 @@ export default async function OrgUsersPage() {
 
   return (
     <div className="space-y-6">
+      {params.invited === "1" && (
+        <div className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+          Invitación enviada correctamente por correo.
+        </div>
+      )}
+
       {hasPermission(user, "users.create") && (
         <section className="card p-4">
-          <h2 className="text-sm font-medium text-foreground">
-            Invitar usuario
-          </h2>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Añade un nuevo usuario a tu organización asignándole un rol.
-          </p>
-          <form action={inviteOrgUser} className="mt-4 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">
-                  Nombre
-                </label>
-                <input
-                  name="firstName"
-                  placeholder="Ej: María"
-                  required
-                  className="input-base"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">
-                  Apellidos
-                </label>
-                <input
-                  name="lastName"
-                  placeholder="Ej: García López"
-                  className="input-base"
-                />
-              </div>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-sm font-medium text-foreground">
+                Invitar usuario
+              </h2>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Añade un nuevo usuario a tu organización asignándole un rol.
+              </p>
             </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-foreground">
-                Email
-              </label>
-              <input
-                name="email"
-                type="email"
-                placeholder="email@ejemplo.com"
-                required
-                className="input-base"
-              />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">
-                  Contraseña
-                </label>
-                <input
-                  name="password"
-                  type="password"
-                  placeholder="Mínimo 6 caracteres"
-                  required
-                  minLength={6}
-                  className="input-base"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">
-                  Rol
-                </label>
-                <select name="roleId" required className="select-base w-full">
-                  {rolesForSelect.map((r) => (
-                    <option key={r._id} value={r._id}>
-                      {r.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <button type="submit" className="btn-primary">
-              Invitar usuario
-            </button>
-          </form>
+            <InviteOrgUserModal roles={rolesForSelect} inviteAction={inviteOrgUser} />
+          </div>
         </section>
       )}
 
@@ -147,6 +103,7 @@ export default async function OrgUsersPage() {
           removeAction={removeOrgUser}
         />
       </section>
+
     </div>
   );
 }

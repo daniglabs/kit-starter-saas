@@ -1,13 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-const PUBLIC_PATHS = ["/login", "/api/seed"];
+const PUBLIC_PATHS = ["/login", "/api/seed", "/invite"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isPublic = PUBLIC_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
-  );
+  const isPublic =
+    PUBLIC_PATHS.some(
+      (path) => pathname === path || pathname.startsWith(`${path}/`)
+    ) || pathname.startsWith("/api/webhooks/");
 
   const token = await getToken({
     req: request as any,

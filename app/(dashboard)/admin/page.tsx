@@ -7,7 +7,7 @@ export default async function AdminDashboardPage() {
             Panel de administrador
           </h1>
           <p className="text-sm text-muted-foreground">
-            Bienvenido al resumen del panel. Desde aquí podrás navegar a
+            Bienvenido al dashboard del panel. Desde aquí podrás navegar a
             usuarios, organizaciones y métricas.
           </p>
         </div>
@@ -17,7 +17,7 @@ export default async function AdminDashboardPage() {
         <div className="card p-4">
           <h2 className="text-sm font-medium">Organizaciones</h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            Resumen y gestión de organizaciones (placeholder).
+            Dashboard y gestión de organizaciones (placeholder).
           </p>
         </div>
         <div className="card p-4">

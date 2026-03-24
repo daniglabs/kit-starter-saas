@@ -19,17 +19,20 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen flex-col bg-background md:flex-row md:items-stretch">
       <AppSidebar
         variant="admin"
         links={[
-          { href: "/admin", label: "Resumen", icon: "dashboard" },
+          { href: "/admin", label: "Dashboard", icon: "dashboard" },
           { href: "/admin/users", label: "Usuarios", icon: "users" },
+          { href: "/admin/plans", label: "Planes", icon: "plans" },
           { href: "/admin/logs", label: "Logs", icon: "logs" },
           { href: "/admin/profile", label: "Mi perfil", icon: "profile" }
         ]}
       />
-      <main className="flex-1 overflow-y-auto bg-background px-8 py-8">{children}</main>
+      <main className="min-h-0 flex-1 overflow-y-auto bg-background px-4 py-6 md:px-8 md:py-8">
+        {children}
+      </main>
     </div>
   );
 }

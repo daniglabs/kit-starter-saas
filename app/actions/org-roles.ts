@@ -37,6 +37,7 @@ export async function createOrgRole(formData: FormData) {
 
   await logAction({
     userId: user.id,
+    organizationId: user.organizationId,
     userEmail: user.email,
     userName: user.name,
     action: "create",
@@ -82,6 +83,7 @@ export async function updateOrgRole(formData: FormData) {
 
   await logAction({
     userId: user.id,
+    organizationId: user.organizationId,
     userEmail: user.email,
     userName: user.name,
     action: "update",
@@ -117,6 +119,7 @@ export async function deleteOrgRole(formData: FormData) {
 
   await logAction({
     userId: user.id,
+    organizationId: user.organizationId,
     userEmail: user.email,
     userName: user.name,
     action: "delete",

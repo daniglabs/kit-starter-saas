@@ -6,9 +6,14 @@ import { usePathname } from "next/navigation";
 interface SettingsTabsProps {
   canAccessRoles: boolean;
   canAccessUsers: boolean;
+  canAccessLogs: boolean;
 }
 
-export function SettingsTabs({ canAccessRoles, canAccessUsers }: SettingsTabsProps) {
+export function SettingsTabs({
+  canAccessRoles,
+  canAccessUsers,
+  canAccessLogs
+}: SettingsTabsProps) {
   const pathname = usePathname();
 
   return (
@@ -35,6 +40,18 @@ export function SettingsTabs({ canAccessRoles, canAccessUsers }: SettingsTabsPro
           }`}
         >
           Usuarios
+        </Link>
+      )}
+      {canAccessLogs && (
+        <Link
+          href="/dashboard/settings/logs"
+          className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
+            pathname?.includes("/logs")
+              ? "border-primary text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          Logs
         </Link>
       )}
     </nav>

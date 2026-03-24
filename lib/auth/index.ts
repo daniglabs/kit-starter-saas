@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import { User } from "@/models/User";
-import { logAction } from "@/lib/audit";
+import { logAction, organizationIdForUser } from "@/lib/audit";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -78,8 +78,10 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signIn({ user }) {
+      const organizationId = await organizationIdForUser(user.id ?? undefined);
       await logAction({
         userId: user.id ?? null,
+        organizationId,
         userEmail: user.email ?? "",
         userName: user.name ?? "",
         action: "login",
@@ -90,8 +92,11 @@ export const authOptions: NextAuthOptions = {
     async signOut({ token }) {
       const email = (token as any)?.email ?? "";
       const name = (token as any)?.name ?? "";
+      const sub = (token as any)?.sub ?? null;
+      const organizationId = await organizationIdForUser(sub ?? undefined);
       await logAction({
-        userId: (token as any)?.sub ?? null,
+        userId: sub,
+        organizationId,
         userEmail: email,
         userName: name,
         action: "logout",
@@ -101,4 +106,3 @@ export const authOptions: NextAuthOptions = {
     }
   }
 };
-

@@ -1,0 +1,68 @@
+0 verbose cli /usr/local/bin/node /usr/local/bin/npm
+1 info using npm@11.1.0
+2 info using node@v22.14.0
+3 silly config load:file:/usr/local/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/danielgarciagarcia/Documents/Glabs Academy/SAAS Kit Starter/.npmrc
+5 silly config load:file:/Users/danielgarciagarcia/.npmrc
+6 silly config load:file:/usr/local/etc/npmrc
+7 verbose title npm install nodemailer
+8 verbose argv "install" "nodemailer" "--cache" ".npm-cache"
+9 verbose logfile logs-max:10 dir:/Users/danielgarciagarcia/Documents/Glabs Academy/SAAS Kit Starter/.npm-cache/_logs/2026-03-24T18_43_56_904Z-
+10 verbose logfile /Users/danielgarciagarcia/Documents/Glabs Academy/SAAS Kit Starter/.npm-cache/_logs/2026-03-24T18_43_56_904Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 silly idealTree buildDeps
+14 silly fetch manifest nodemailer@*
+15 silly packumentCache full:https://registry.npmjs.org/nodemailer cache-miss
+16 http fetch GET 200 https://registry.npmjs.org/nodemailer 239ms (cache miss)
+17 silly packumentCache full:https://registry.npmjs.org/nodemailer set size:undefined disposed:false
+18 silly placeDep ROOT nodemailer@8.0.3 OK for: saas-kit-starter@0.1.0 want: *
+19 silly fetch manifest nodemailer@^7.0.7
+20 silly packumentCache full:https://registry.npmjs.org/nodemailer cache-miss
+21 http cache https://registry.npmjs.org/nodemailer 3ms (cache hit)
+22 silly packumentCache full:https://registry.npmjs.org/nodemailer set size:567916 disposed:false
+23 silly placeDep ROOT nodemailer@7.0.13 REPLACE for: next-auth@4.24.13 want: ^7.0.7
+24 silly reify moves {}
+25 verbose stack Error: EACCES: permission denied, mkdir '/Users/danielgarciagarcia/Documents/Glabs Academy/SAAS Kit Starter/node_modules/@emnapi/core'
+25 verbose stack     at async mkdir (node:internal/fs/promises:857:10)
+25 verbose stack     at async /usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:624:20
+25 verbose stack     at async Promise.allSettled (index 0)
+25 verbose stack     at async [reifyPackages] (/usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:325:11)
+25 verbose stack     at async Arborist.reify (/usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:142:5)
+25 verbose stack     at async Install.exec (/usr/local/lib/node_modules/npm/lib/commands/install.js:149:5)
+25 verbose stack     at async Npm.exec (/usr/local/lib/node_modules/npm/lib/npm.js:207:9)
+25 verbose stack     at async module.exports (/usr/local/lib/node_modules/npm/lib/cli/entry.js:67:5)
+26 error code EACCES
+27 error syscall mkdir
+28 error path /Users/danielgarciagarcia/Documents/Glabs Academy/SAAS Kit Starter/node_modules/@emnapi/core
+29 error errno -13
+30 error Error: EACCES: permission denied, mkdir '/Users/danielgarciagarcia/Documents/Glabs Academy/SAAS Kit Starter/node_modules/@emnapi/core'
+30 error     at async mkdir (node:internal/fs/promises:857:10)
+30 error     at async /usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:624:20
+30 error     at async Promise.allSettled (index 0)
+30 error     at async [reifyPackages] (/usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:325:11)
+30 error     at async Arborist.reify (/usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:142:5)
+30 error     at async Install.exec (/usr/local/lib/node_modules/npm/lib/commands/install.js:149:5)
+30 error     at async Npm.exec (/usr/local/lib/node_modules/npm/lib/npm.js:207:9)
+30 error     at async module.exports (/usr/local/lib/node_modules/npm/lib/cli/entry.js:67:5) {
+30 error   errno: -13,
+30 error   code: 'EACCES',
+30 error   syscall: 'mkdir',
+30 error   path: '/Users/danielgarciagarcia/Documents/Glabs Academy/SAAS Kit Starter/node_modules/@emnapi/core'
+30 error }
+31 error
+31 error The operation was rejected by your operating system.
+31 error It is likely you do not have the permissions to access this file as the current user
+31 error
+31 error If you believe this might be a permissions issue, please double-check the
+31 error permissions of the file and its containing directories, or try running
+31 error the command again as root/Administrator.
+32 silly unfinished npm timer reify 1774377837166
+33 silly unfinished npm timer reify:createSparse 1774377837515
+34 verbose cwd /Users/danielgarciagarcia/Documents/Glabs Academy/SAAS Kit Starter
+35 verbose os Darwin 25.3.0
+36 verbose node v22.14.0
+37 verbose npm  v11.1.0
+38 verbose exit -13
+39 verbose code -13
+40 error A complete log of this run can be found in: /Users/danielgarciagarcia/Documents/Glabs Academy/SAAS Kit Starter/.npm-cache/_logs/2026-03-24T18_43_56_904Z-debug-0.log

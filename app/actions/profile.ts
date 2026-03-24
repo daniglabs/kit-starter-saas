@@ -31,6 +31,13 @@ export async function updateProfile(formData: FormData) {
 
   const name = lastName ? `${firstName} ${lastName}` : firstName;
 
+  const existingProfile = await User.findById(currentUser.id)
+    .select("organization")
+    .lean();
+  const profileOrgId = existingProfile?.organization
+    ? String(existingProfile.organization)
+    : null;
+
   await User.findByIdAndUpdate(currentUser.id, {
     firstName,
     lastName,
@@ -39,6 +46,7 @@ export async function updateProfile(formData: FormData) {
 
   await logAction({
     userId: currentUser.id,
+    organizationId: profileOrgId,
     userEmail: currentUser.email ?? "",
     userName: currentUser.name ?? "",
     action: "update",
@@ -86,8 +94,13 @@ export async function changePassword(formData: FormData) {
   const passwordHash = await bcrypt.hash(newPassword, 10);
   await User.findByIdAndUpdate(currentUser.id, { passwordHash });
 
+  const orgPwd = user.organization
+    ? String(user.organization)
+    : null;
+
   await logAction({
     userId: currentUser.id,
+    organizationId: orgPwd,
     userEmail: currentUser.email ?? "",
     userName: currentUser.name ?? "",
     action: "password_change",

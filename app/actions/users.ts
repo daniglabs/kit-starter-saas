@@ -44,8 +44,10 @@ export async function createUser(formData: FormData) {
     userType
   });
 
+  const newUserOrg = (newUser as { organization?: unknown }).organization;
   await logAction({
     userId: admin.id,
+    organizationId: newUserOrg ? String(newUserOrg) : null,
     userEmail: admin.email ?? "",
     userName: admin.name ?? "",
     action: "create",
@@ -73,6 +75,11 @@ export async function updateUser(formData: FormData) {
     throw new Error("El email es obligatorio");
   }
 
+  const targetBefore = await User.findById(userId).select("organization").lean();
+  const targetOrgId = targetBefore?.organization
+    ? String(targetBefore.organization)
+    : null;
+
   const existing = await User.findOne({ email, _id: { $ne: userId } });
   if (existing) {
     throw new Error("Ya existe otro usuario con este email");
@@ -82,6 +89,7 @@ export async function updateUser(formData: FormData) {
 
   await logAction({
     userId: admin.id,
+    organizationId: targetOrgId,
     userEmail: admin.email ?? "",
     userName: admin.name ?? "",
     action: "update",
@@ -105,11 +113,15 @@ export async function deleteUser(formData: FormData) {
 
   const targetUser = await User.findById(userId).lean();
   const targetEmail = (targetUser as any)?.email ?? userId;
+  const deleteOrgId = (targetUser as any)?.organization
+    ? String((targetUser as any).organization)
+    : null;
 
   await User.findByIdAndDelete(userId);
 
   await logAction({
     userId: admin.id,
+    organizationId: deleteOrgId,
     userEmail: admin.email ?? "",
     userName: admin.name ?? "",
     action: "delete",

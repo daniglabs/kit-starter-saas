@@ -21,13 +21,20 @@ const PERMISSION_LABELS: Record<Permission, string> = {
   "roles.create": "Crear roles",
   "roles.read": "Consultar roles",
   "roles.update": "Editar roles",
-  "roles.delete": "Eliminar roles"
+  "roles.delete": "Eliminar roles",
+  "logs.read": "Consultar logs de actividad"
 };
 
 export default async function OrgRolesPage() {
   const user = await getCurrentUserWithOrg();
   if (!user?.organizationId) redirect("/dashboard");
   if (!hasPermission(user, "roles.read")) {
+    if (hasPermission(user, "users.read")) {
+      redirect("/dashboard/settings/users");
+    }
+    if (hasPermission(user, "logs.read")) {
+      redirect("/dashboard/settings/logs");
+    }
     redirect("/dashboard");
   }
 

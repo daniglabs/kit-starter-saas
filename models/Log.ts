@@ -3,6 +3,7 @@ import { Schema, model, models, type Model } from "mongoose";
 export interface ILog {
   _id: string;
   userId: Schema.Types.ObjectId | null;
+  organization: Schema.Types.ObjectId | null;
   userEmail: string;
   userName: string;
   action: string;
@@ -16,6 +17,12 @@ export interface ILog {
 const logSchema = new Schema<ILog>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", default: null },
+    organization: {
+      type: Schema.Types.ObjectId,
+      ref: "Organization",
+      default: null,
+      index: true
+    },
     userEmail: { type: String, required: true, index: true },
     userName: { type: String, required: true },
     action: { type: String, required: true, index: true },
@@ -28,6 +35,7 @@ const logSchema = new Schema<ILog>(
 );
 
 logSchema.index({ createdAt: -1 });
+logSchema.index({ organization: 1, createdAt: -1 });
 
 export const Log: Model<ILog> =
   (models.Log as Model<ILog>) || model<ILog>("Log", logSchema);

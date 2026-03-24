@@ -16,7 +16,10 @@ export default async function SettingsLayout({
 
   const canAccessRoles = hasPermission(user, "roles.read");
   const canAccessUsers = hasPermission(user, "users.read");
-  if (!canAccessRoles && !canAccessUsers) redirect("/dashboard");
+  const canAccessLogs = hasPermission(user, "logs.read");
+  if (!canAccessRoles && !canAccessUsers && !canAccessLogs) {
+    redirect("/dashboard");
+  }
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
@@ -32,6 +35,7 @@ export default async function SettingsLayout({
       <SettingsTabs
         canAccessRoles={canAccessRoles}
         canAccessUsers={canAccessUsers}
+        canAccessLogs={canAccessLogs}
       />
 
       {children}

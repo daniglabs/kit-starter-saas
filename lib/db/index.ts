@@ -42,4 +42,3 @@ export async function connectDB() {
 
   return cache.conn;
 }
-

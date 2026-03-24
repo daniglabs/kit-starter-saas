@@ -1,10 +1,18 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
-import { Organization } from "@/models/Organization";
-import { OrganizationRole } from "@/models/OrganizationRole";
 import { User } from "@/models/User";
-import type { Permission } from "@/models/OrganizationRole";
+import {
+  PERMISSIONS,
+  type Permission
+} from "@/models/OrganizationRole";
+
+function normalizeRolePermissions(raw: unknown): Permission[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter((p): p is Permission =>
+    PERMISSIONS.includes(p as Permission)
+  );
+}
 
 export async function getCurrentUser() {
   const session = await getServerSession(authOptions);
@@ -34,7 +42,7 @@ export async function getCurrentUserWithOrg() {
 
     const org = user.organization as any;
     const orgRole = user.organizationRole as any;
-    const permissions: Permission[] = orgRole?.permissions ?? [];
+    const permissions = normalizeRolePermissions(orgRole?.permissions);
     const orgCreatedBy = org?.createdBy?.toString?.() ?? org?.createdBy;
 
     const userType = (user as any).userType ?? (user as any).role;
@@ -64,4 +72,3 @@ export function hasPermission(
   if (user.isOrgAdmin) return true;
   return user.permissions.includes(permission);
 }
-

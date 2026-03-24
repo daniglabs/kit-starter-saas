@@ -8,7 +8,8 @@ export const PERMISSIONS = [
   "roles.create",
   "roles.read",
   "roles.update",
-  "roles.delete"
+  "roles.delete",
+  "logs.read"
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];

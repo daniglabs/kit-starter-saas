@@ -11,10 +11,13 @@ export function LoginForm() {
   const [localError, setLocalError] = useState<string | null>(null);
 
   const errorParam = searchParams.get("error");
+  const invitedParam = searchParams.get("invited");
   const errorMessage =
     localError ||
     (errorParam === "CredentialsSignin"
       ? "Credenciales no válidas"
+      : errorParam === "InvitacionExpirada"
+      ? "La invitación ha expirado o ya fue utilizada"
       : errorParam);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -64,6 +67,12 @@ export function LoginForm() {
           <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <p>{errorMessage}</p>
+          </div>
+        )}
+
+        {invitedParam === "1" && (
+          <div className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
+            Cuenta activada correctamente. Ya puedes iniciar sesión.
           </div>
         )}
 

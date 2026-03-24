@@ -1,49 +1,49 @@
 import { connectDB } from "@/lib/db";
 import { Log } from "@/models/Log";
+import { Organization } from "@/models/Organization";
+import { LogsTable, type LogRow } from "@/components/logs-table";
 
 const PAGE_SIZE = 50;
+
+function buildLogsQueryString(page: number, orgId: string | undefined) {
+  const q = new URLSearchParams();
+  if (page > 1) q.set("page", String(page));
+  if (orgId) q.set("org", orgId);
+  const s = q.toString();
+  return `/admin/logs${s ? `?${s}` : ""}`;
+}
 
 export default async function AdminLogsPage({
   searchParams
 }: {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; org?: string }>;
 }) {
   await connectDB();
 
   const params = await searchParams;
   const page = Math.max(1, parseInt(params.page ?? "1", 10));
+  const orgFilter = params.org?.trim() || undefined;
   const skip = (page - 1) * PAGE_SIZE;
 
-  const [logs, total] = await Promise.all([
-    Log.find()
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(PAGE_SIZE)
-      .lean(),
-    Log.countDocuments()
+  const filter = orgFilter ? { organization: orgFilter } : {};
+
+  const [rawLogs, total, organizations] = await Promise.all([
+    Log.find(filter).sort({ createdAt: -1 }).skip(skip).limit(PAGE_SIZE).lean(),
+    Log.countDocuments(filter),
+    Organization.find().sort({ name: 1 }).select("name slug").lean()
   ]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  const ACTION_LABELS: Record<string, string> = {
-    login: "Login",
-    logout: "Logout",
-    create: "Crear",
-    update: "Editar",
-    delete: "Eliminar",
-    invite: "Invitar",
-    update_role: "Cambiar rol",
-    remove: "Eliminar de org",
-    password_change: "Cambiar contraseña"
-  };
-
-  const ENTITY_LABELS: Record<string, string> = {
-    auth: "Autenticación",
-    user: "Usuario",
-    org_user: "Usuario org",
-    org_role: "Rol org",
-    profile: "Perfil"
-  };
+  const logs: LogRow[] = rawLogs.map((log: any) => ({
+    _id: String(log._id),
+    createdAt: log.createdAt,
+    userName: log.userName,
+    userEmail: log.userEmail,
+    action: log.action,
+    entity: log.entity,
+    details: log.details
+  }));
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -52,71 +52,49 @@ export default async function AdminLogsPage({
           Logs de actividad
         </h1>
         <p className="text-sm text-muted-foreground">
-          Registro de todas las acciones realizadas por los usuarios de la plataforma.
+          Registro de acciones en toda la plataforma. Filtra por organización
+          para ver solo la actividad de clientes en esa organización.
         </p>
       </header>
 
-      <section className="card overflow-hidden p-0">
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-left text-sm">
-            <thead className="border-b border-border bg-muted/30 text-xs uppercase text-muted-foreground">
-              <tr>
-                <th className="px-4 py-3">Fecha</th>
-                <th className="px-4 py-3">Usuario</th>
-                <th className="px-4 py-3">Acción</th>
-                <th className="px-4 py-3">Entidad</th>
-                <th className="px-4 py-3">Detalles</th>
-              </tr>
-            </thead>
-            <tbody>
-              {logs.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={5}
-                    className="px-4 py-8 text-center text-sm text-muted-foreground"
-                  >
-                    No hay registros aún.
-                  </td>
-                </tr>
-              ) : (
-                logs.map((log: any) => (
-                  <tr
-                    key={String(log._id)}
-                    className="border-b border-border/60 last:border-0"
-                  >
-                    <td className="whitespace-nowrap px-4 py-3 text-xs text-muted-foreground">
-                      {new Date(log.createdAt).toLocaleString("es-ES", {
-                        dateStyle: "short",
-                        timeStyle: "medium"
-                      })}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div>
-                        <span className="font-medium text-foreground">
-                          {log.userName}
-                        </span>
-                        <span className="ml-1 text-xs text-muted-foreground">
-                          ({log.userEmail})
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="rounded bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
-                        {ACTION_LABELS[log.action] ?? log.action}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      {ENTITY_LABELS[log.entity] ?? log.entity}
-                    </td>
-                    <td className="max-w-md truncate px-4 py-3 text-muted-foreground">
-                      {log.details}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+      <form
+        method="get"
+        className="card flex flex-wrap items-end gap-4 p-4"
+      >
+        <input type="hidden" name="page" value="1" />
+        <div className="min-w-[200px] flex-1 space-y-1.5">
+          <label
+            htmlFor="admin-logs-org"
+            className="text-xs font-medium text-foreground"
+          >
+            Organización
+          </label>
+          <select
+            id="admin-logs-org"
+            name="org"
+            defaultValue={orgFilter ?? ""}
+            className="select-base w-full max-w-md"
+          >
+            <option value="">Todas las organizaciones</option>
+            {organizations.map((o: any) => (
+              <option key={String(o._id)} value={String(o._id)}>
+                {o.name} ({o.slug})
+              </option>
+            ))}
+          </select>
         </div>
+        <button type="submit" className="btn-primary text-sm">
+          Filtrar
+        </button>
+        {orgFilter && (
+          <a href="/admin/logs" className="btn-ghost text-sm">
+            Quitar filtro
+          </a>
+        )}
+      </form>
+
+      <section className="card overflow-hidden p-0">
+        <LogsTable logs={logs} />
 
         {totalPages > 1 && (
           <div className="flex items-center justify-between border-t border-border px-4 py-3">
@@ -126,7 +104,11 @@ export default async function AdminLogsPage({
             </p>
             <div className="flex gap-2">
               <a
-                href={page > 1 ? `/admin/logs?page=${page - 1}` : "#"}
+                href={
+                  page > 1
+                    ? buildLogsQueryString(page - 1, orgFilter)
+                    : "#"
+                }
                 className={`rounded px-3 py-1 text-sm ${
                   page > 1
                     ? "text-primary hover:bg-primary/10"
@@ -136,7 +118,11 @@ export default async function AdminLogsPage({
                 Anterior
               </a>
               <a
-                href={page < totalPages ? `/admin/logs?page=${page + 1}` : "#"}
+                href={
+                  page < totalPages
+                    ? buildLogsQueryString(page + 1, orgFilter)
+                    : "#"
+                }
                 className={`rounded px-3 py-1 text-sm ${
                   page < totalPages
                     ? "text-primary hover:bg-primary/10"

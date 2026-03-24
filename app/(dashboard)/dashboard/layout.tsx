@@ -19,16 +19,18 @@ export default async function CustomerLayout({
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen flex-col md:flex-row md:items-stretch">
       <AppSidebar
         variant="customer"
         links={[
-          { href: "/dashboard", label: "Resumen", icon: "dashboard" },
+          { href: "/dashboard", label: "Dashboard", icon: "dashboard" },
           { href: "/dashboard/settings", label: "Configuración", icon: "settings" },
           { href: "/dashboard/profile", label: "Mi perfil", icon: "profile" }
         ]}
       />
-      <main className="flex-1 overflow-y-auto bg-background px-8 py-8">{children}</main>
+      <main className="min-h-0 flex-1 overflow-y-auto bg-background px-4 py-6 md:px-8 md:py-8">
+        {children}
+      </main>
     </div>
   );
 }
