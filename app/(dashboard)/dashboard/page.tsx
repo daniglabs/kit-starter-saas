@@ -1,6 +1,8 @@
+import Link from "next/link";
+
 export default async function CustomerDashboardPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
+    <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">
           Panel de cliente
@@ -23,6 +25,11 @@ export default async function CustomerDashboardPage() {
           <p className="mt-1 text-xs text-muted-foreground">
             Información sobre la organización asociada (placeholder).
           </p>
+          <div className="mt-4">
+            <Link href="/dashboard/settings/billing" className="btn-primary text-sm">
+              Mejorar plan
+            </Link>
+          </div>
         </div>
       </section>
     </div>

@@ -8,6 +8,7 @@ export default async function SettingsPage() {
   // Redirigir a la primera sección a la que tenga acceso
   if (hasPermission(user, "users.read")) redirect("/dashboard/settings/users");
   if (hasPermission(user, "roles.read")) redirect("/dashboard/settings/roles");
+  if (user.isOrgAdmin) redirect("/dashboard/settings/billing");
   if (hasPermission(user, "logs.read")) redirect("/dashboard/settings/logs");
   redirect("/dashboard");
 }

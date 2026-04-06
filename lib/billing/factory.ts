@@ -1,4 +1,4 @@
-import type { BillingProvider } from "./types";
+import type { BillingProvider, BillingProviderId } from "./types";
 import { NoopBillingProvider } from "./providers/noop";
 
 /**
@@ -8,6 +8,15 @@ import { NoopBillingProvider } from "./providers/noop";
  */
 export function getBillingProvider(): BillingProvider {
   const id = (process.env.BILLING_PROVIDER || "noop").toLowerCase();
+  return getBillingProviderById(id);
+}
+
+/**
+ * Resuelve un proveedor concreto por ID.
+ * Esto permite exponer webhooks por proveedor sin tocar los controladores.
+ */
+export function getBillingProviderById(providerId: string): BillingProvider {
+  const id = (providerId || "noop").toLowerCase() as BillingProviderId;
 
   switch (id) {
     case "noop":

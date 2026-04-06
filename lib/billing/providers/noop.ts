@@ -1,6 +1,7 @@
 import { getAppPublicUrl } from "@/lib/mail/templates/utils";
 import type {
   BillingProvider,
+  BillingWebhookContext,
   CreateCheckoutSessionParams,
   CreateCustomerPortalSessionParams,
   NormalizedBillingEvent
@@ -29,7 +30,8 @@ export class NoopBillingProvider implements BillingProvider {
 
   async parseWebhookPayload(
     _rawBody: string,
-    _headers: Record<string, string | undefined>
+    _headers: Record<string, string | undefined>,
+    _context: BillingWebhookContext
   ): Promise<NormalizedBillingEvent[]> {
     return [];
   }

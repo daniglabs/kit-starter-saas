@@ -17,5 +17,6 @@ export const ENTITY_LABELS: Record<string, string> = {
   org_user: "Usuario org",
   org_role: "Rol org",
   profile: "Perfil",
-  plan: "Plan"
+  plan: "Plan",
+  subscription: "Suscripción"
 };

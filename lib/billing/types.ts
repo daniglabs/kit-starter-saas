@@ -23,6 +23,13 @@ export interface CreateCustomerPortalSessionParams {
   returnUrl: string;
 }
 
+export interface BillingWebhookContext {
+  /** Proveedor objetivo (stripe/paypal/noop/...) resuelto por URL o header */
+  providerId: BillingProviderId;
+  /** URL absoluta del endpoint para depuración/firma avanzada */
+  url: string;
+}
+
 /**
  * Evento normalizado tras un webhook. Los adaptadores (Stripe, PayPal, …)
  * convierten su payload a esta forma; el dominio solo reacciona a esto.
@@ -55,6 +62,7 @@ export interface BillingProvider {
   /** Valida firma / cuerpo y devuelve eventos ya normalizados para persistir en BD. */
   parseWebhookPayload(
     rawBody: string,
-    headers: Record<string, string | undefined>
+    headers: Record<string, string | undefined>,
+    context: BillingWebhookContext
   ): Promise<NormalizedBillingEvent[]>;
 }

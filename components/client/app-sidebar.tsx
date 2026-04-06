@@ -17,11 +17,13 @@ import { signOut } from "next-auth/react";
 
 type SidebarVariant = "admin" | "customer";
 
-interface SidebarLink {
+export interface SidebarLink {
   href: string;
   label: string;
   icon: "dashboard" | "users" | "profile" | "settings" | "logs" | "plans";
 }
+
+export type { SidebarVariant };
 
 interface AppSidebarProps {
   variant: SidebarVariant;

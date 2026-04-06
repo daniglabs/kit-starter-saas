@@ -1,202 +1,113 @@
-# 🚀 SaaS Kit Starter
+# SaaS Kit Starter
 
-Base estructural para un **SaaS multitenant** desarrollado con tecnologías modernas como Next.js 14.
-Incluye gestión de organizaciones, control de accesos (RBAC), auditoría de acciones y paneles administrativos separados.
+Starter SaaS multitenant con Next.js 14, TypeScript, MongoDB y RBAC.
 
----
+## Qué incluye
 
-## 🧩 Características Principales
+- Panel dual:
+  - `admin` (`/admin`): usuarios globales, planes, logs, perfil.
+  - `cliente` (`/dashboard`): configuración de organización, perfil y plan.
+- Autenticación:
+  - Login con credenciales (NextAuth).
+  - Registro público (`/register`).
+  - Recuperación de contraseña (`/forgot-password`, `/reset-password`).
+  - Flujo de invitaciones (`/invite/[token]`).
+- RBAC organizacional:
+  - Permisos de roles para usuarios, roles y logs.
+- Auditoría:
+  - Registro de acciones clave (auth, usuarios, roles, perfiles, suscripciones).
+- Billing desacoplado por provider:
+  - Contrato `BillingProvider`.
+  - Webhooks genérico + por proveedor (`/api/webhooks/billing` y `/api/webhooks/billing/[provider]`).
+  - Provider base `noop` listo para extender con Stripe/PayPal.
+- Plantillas de email HTML table-friendly (compatibles con clientes de correo comunes).
 
-* 🏢 Arquitectura **multitenant** con aislamiento de datos
-* 👥 Gestión de usuarios y organizaciones
-* 🔐 Sistema de autenticación seguro con JWT
-* 🛡️ Control de acceso basado en roles (**RBAC**)
-* 📜 Auditoría completa de acciones (logs)
-* 🖥️ Panel dual:
+## Stack
 
-  * Admin global (`/admin`)
-  * Cliente/tenant (`/dashboard`)
-* ⚡ Interfaz dinámica basada en permisos
+- Next.js 14 (App Router)
+- React 18
+- TypeScript
+- MongoDB + Mongoose
+- NextAuth
+- Tailwind CSS
 
----
+## Variables de entorno
 
-## 🛠️ Stack Tecnológico
-
-| Tecnología        | Descripción                        |
-| ----------------- | ---------------------------------- |
-| **Framework**     | Next.js 14 (App Router) + React 18 |
-| **Lenguaje**      | TypeScript                         |
-| **Base de Datos** | MongoDB + Mongoose                 |
-| **Autenticación** | NextAuth.js (Credentials Provider) |
-| **Seguridad**     | bcryptjs (hash de contraseñas)     |
-| **Estilos**       | Tailwind CSS                       |
-| **Iconos**        | Lucide React                       |
-
----
-
-## 📊 Arquitectura de Datos
-
-El sistema está diseñado para soportar múltiples organizaciones con separación de recursos.
-
-### Modelos principales:
-
-```ts
-User {
-  email: string
-  name: string
-  userType: "admin" | "customer"
-  organization?: ObjectId
-}
-
-Organization {
-  name: string
-  slug: string
-  createdBy: ObjectId
-}
-
-OrgRole {
-  name: string
-  permissions: string[]
-  isSystem: boolean
-}
-
-Log {
-  userId: ObjectId
-  action: string
-  entity: string
-  details: string
-}
-```
-
----
-
-## 🔐 Autenticación y Seguridad
-
-* Login con **email + contraseña**
-* Sesiones gestionadas con **JWT**
-* Middleware para protección de rutas
-* Redirección automática según:
-
-  * Estado de autenticación
-  * Tipo de usuario
-* Contraseñas encriptadas con **bcrypt**
-
----
-
-## 👥 Tipos de Usuario
-
-### 🛡️ Admin (Global)
-
-* Acceso completo a `/admin`
-* Gestión global de usuarios
-* Visualización de logs del sistema
-
-### 🏢 Customer (Tenant)
-
-* Acceso a `/dashboard`
-* Gestión de su organización:
-
-  * Usuarios
-  * Roles
-  * Configuración
-
----
-
-## 🖥️ Paneles
-
-### 🛡️ Admin Panel (`/admin`)
-
-* Dashboard con métricas
-* CRUD de usuarios globales
-* Auditoría (logs paginados)
-* Gestión de perfil
-
-### 🏢 Client Panel (`/dashboard`)
-
-* Dashboard organizacional
-* Configuración:
-
-  * Roles (permisos granulares)
-  * Usuarios
-* Gestión de perfil
-
----
-
-## 📜 Sistema de Permisos (RBAC)
-
-* 🔝 **Jerarquía**
-
-  * Admin global → acceso total
-  * Admin de organización → acceso total dentro del tenant
-
-* 🔑 **Permisos granulares**
-
-  * `users.*`
-  * `roles.*`
-
-* 🎯 **UI adaptativa**
-
-  * Tabs y botones visibles según permisos
-
-* 🔄 **Redirección inteligente**
-
-  * Acceso automático a la primera sección permitida
-
----
-
-## 📝 Sistema de Auditoría
-
-Se registran automáticamente:
-
-* 🔐 Autenticación: login / logout
-* 👥 Usuarios: creación, edición, eliminación
-* 🛡️ Roles: cambios en permisos
-* 👤 Perfil: actualizaciones de datos y seguridad
-
----
-
-## 🌱 Seed Inicial (Modo Desarrollo)
-
-Para pruebas rápidas:
-
-| Tipo           | Credenciales                           |
-| -------------- | -------------------------------------- |
-| Admin Global   | `admin@example.com` / `admin123`       |
-| Customer Admin | `customer@example.com` / `customer123` |
-| Organización   | `Acme Inc.`                            |
-
----
-
-## 🚀 Instalación
+1. Copia el ejemplo:
 
 ```bash
-# Clonar repositorio
-git clone https://github.com/tu-usuario/saas-kit-starter.git
+cp .env.example .env.local
+```
 
-# Instalar dependencias
+2. Rellena valores reales en `.env.local`.
+
+## Instalación
+
+```bash
 npm install
-
-# Configurar variables de entorno
-cp .env.example .env
-
-# Ejecutar en desarrollo
 npm run dev
 ```
 
----
+## Seed de desarrollo
 
-## 📌 Notas
+Endpoint:
 
-* Diseñado para **escalar fácilmente**
-* Basado en **mejores prácticas de Next.js 14**
-* Arquitectura preparada para:
+- `GET /api/seed`
 
-  * Multi-organización
-  * Extensión de permisos
-  * Auditoría avanzada
+Comportamiento:
 
----
+- En `development`: abierto para acelerar pruebas.
+- En otros entornos: requiere header `x-seed-secret` con valor `SEED_SECRET`.
 
-## 📄 Licencia
+Ejemplo en no-dev:
 
-MIT License
+```bash
+curl -H "x-seed-secret: TU_SEED_SECRET" https://tu-dominio.com/api/seed
+```
+
+## Datos seed por defecto
+
+- Admin global: `admin@example.com` / `admin123`
+- Customer admin: `customer@example.com` / `customer123`
+- Organización demo: `Acme Inc.`
+- Planes demo:
+  - Free
+  - Pro mensual (`20 EUR`) y anual (`180 EUR`, -25%)
+  - Business mensual (`60 EUR`) y anual (`540 EUR`, -25%)
+
+## Scripts
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+npm run typecheck
+```
+
+## CI
+
+Hay workflow en `.github/workflows/ci.yml` que ejecuta:
+
+- `npm ci`
+- `npm run typecheck`
+- `npm run lint`
+- `npm run build`
+
+## Extender pasarelas de pago
+
+Carpeta objetivo:
+
+- `lib/billing/providers/`
+
+Pasos:
+
+1. Crear provider (`stripe.ts`, `paypal.ts`, etc.) implementando `BillingProvider`.
+2. Registrarlo en `lib/billing/factory.ts`.
+3. Mapear webhooks al formato `NormalizedBillingEvent`.
+
+No necesitas tocar controladores ni acciones si respetas el contrato.
+
+## Licencia
+
+MIT

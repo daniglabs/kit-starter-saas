@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { AlertCircle, LogIn } from "lucide-react";
 
@@ -12,6 +13,8 @@ export function LoginForm() {
 
   const errorParam = searchParams.get("error");
   const invitedParam = searchParams.get("invited");
+  const registeredParam = searchParams.get("registered");
+  const resetParam = searchParams.get("reset");
   const errorMessage =
     localError ||
     (errorParam === "CredentialsSignin"
@@ -76,6 +79,18 @@ export function LoginForm() {
           </div>
         )}
 
+        {registeredParam === "1" && (
+          <div className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
+            Registro completado. Ya puedes iniciar sesión.
+          </div>
+        )}
+
+        {resetParam === "1" && (
+          <div className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
+            Contraseña actualizada correctamente.
+          </div>
+        )}
+
         <form
           onSubmit={handleSubmit}
           className="space-y-4"
@@ -123,6 +138,15 @@ export function LoginForm() {
             {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>
+
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <Link href="/forgot-password" className="font-medium text-primary hover:underline">
+            ¿Olvidaste tu contraseña?
+          </Link>
+          <Link href="/register" className="font-medium text-primary hover:underline">
+            Crear cuenta
+          </Link>
+        </div>
       </div>
     </main>
   );

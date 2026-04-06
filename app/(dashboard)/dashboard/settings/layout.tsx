@@ -17,18 +17,19 @@ export default async function SettingsLayout({
   const canAccessRoles = hasPermission(user, "roles.read");
   const canAccessUsers = hasPermission(user, "users.read");
   const canAccessLogs = hasPermission(user, "logs.read");
-  if (!canAccessRoles && !canAccessUsers && !canAccessLogs) {
+  const canAccessBilling = user.isOrgAdmin;
+  if (!canAccessRoles && !canAccessUsers && !canAccessLogs && !canAccessBilling) {
     redirect("/dashboard");
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
+    <div className="max-w-4xl space-y-6">
       <header className="space-y-1.5">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Configuración
         </h1>
         <p className="text-sm text-muted-foreground">
-          Gestiona roles, permisos y usuarios de tu organización.
+          Gestiona roles, usuarios, logs y plan de tu organización.
         </p>
       </header>
 
@@ -36,6 +37,7 @@ export default async function SettingsLayout({
         canAccessRoles={canAccessRoles}
         canAccessUsers={canAccessUsers}
         canAccessLogs={canAccessLogs}
+        canAccessBilling={canAccessBilling}
       />
 
       {children}

@@ -7,12 +7,14 @@ interface SettingsTabsProps {
   canAccessRoles: boolean;
   canAccessUsers: boolean;
   canAccessLogs: boolean;
+  canAccessBilling: boolean;
 }
 
 export function SettingsTabs({
   canAccessRoles,
   canAccessUsers,
-  canAccessLogs
+  canAccessLogs,
+  canAccessBilling
 }: SettingsTabsProps) {
   const pathname = usePathname();
 
@@ -40,6 +42,18 @@ export function SettingsTabs({
           }`}
         >
           Usuarios
+        </Link>
+      )}
+      {canAccessBilling && (
+        <Link
+          href="/dashboard/settings/billing"
+          className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
+            pathname?.includes("/billing")
+              ? "border-primary text-foreground"
+              : "border-transparent text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          Planes
         </Link>
       )}
       {canAccessLogs && (

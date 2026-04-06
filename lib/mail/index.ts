@@ -1,6 +1,8 @@
 import { buildInvitationEmail } from "./templates/invitation";
+import { buildPasswordResetEmail } from "./templates/password-reset";
 
 export { buildInvitationEmail } from "./templates/invitation";
+export { buildPasswordResetEmail } from "./templates/password-reset";
 export { renderTransactionalEmailLayout, renderCtaButtonRow } from "./templates/layout";
 export { escapeHtml, getAppPublicUrl, getMailBrandConfig } from "./templates/utils";
 
@@ -8,6 +10,11 @@ interface InviteMailParams {
   to: string;
   invitedByName: string;
   invitationUrl: string;
+}
+
+interface PasswordResetMailParams {
+  to: string;
+  resetUrl: string;
 }
 
 let transporter: any | null = null;
@@ -49,6 +56,21 @@ export async function sendInvitationEmail(params: InviteMailParams) {
   const { subject, html } = buildInvitationEmail({
     invitedByName: params.invitedByName,
     invitationUrl: params.invitationUrl
+  });
+
+  await smtp.sendMail({
+    from,
+    to: params.to,
+    subject,
+    html
+  });
+}
+
+export async function sendPasswordResetEmail(params: PasswordResetMailParams) {
+  const from = process.env.MAIL_FROM || "no-reply@saaskit.local";
+  const smtp = await getTransporter();
+  const { subject, html } = buildPasswordResetEmail({
+    resetUrl: params.resetUrl
   });
 
   await smtp.sendMail({

@@ -11,6 +11,7 @@ import "./Plan";
 import "./Subscription";
 import "./Log";
 import "./UserInvitation";
+import "./PasswordResetToken";
 
 export { User } from "./User";
 export { Organization } from "./Organization";
@@ -35,3 +36,5 @@ export { Log } from "./Log";
 export type { ILog } from "./Log";
 export { UserInvitation } from "./UserInvitation";
 export type { IUserInvitation } from "./UserInvitation";
+export { PasswordResetToken } from "./PasswordResetToken";
+export type { IPasswordResetToken } from "./PasswordResetToken";
