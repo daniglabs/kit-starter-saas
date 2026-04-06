@@ -16,7 +16,7 @@ export default async function AdminUsersPage() {
   }));
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className="max-w-5xl space-y-8">
       <header className="flex items-center justify-between gap-4">
         <div className="space-y-1.5">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">Usuarios</h1>

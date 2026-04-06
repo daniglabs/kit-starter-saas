@@ -46,7 +46,7 @@ export default async function AdminLogsPage({
   }));
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <div className="max-w-6xl space-y-6">
       <header className="space-y-1.5">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Logs de actividad

@@ -29,7 +29,7 @@ export default async function AdminPlansPage() {
   }));
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8">
+    <div className="max-w-5xl space-y-8">
       <header className="space-y-1.5">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Planes
